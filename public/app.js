@@ -395,6 +395,7 @@ Vue.createApp({
                         major: "",
                         permissions: 0
                     };
+                    this.logs = [];
                     this.page = "formLogin";
             });
         },
