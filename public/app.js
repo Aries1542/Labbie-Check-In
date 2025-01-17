@@ -48,10 +48,7 @@ Vue.createApp({
                 classes: [],
                 major: "",
                 permissions: 0
-            },
-
-            password: "password",
-            passwordInput: ""
+            }
         }
     },
 
@@ -119,19 +116,6 @@ Vue.createApp({
             this.getLogs();
         },
 
-        buttonAuthenticate: function () {
-            if (this.passwordInput == this.password) {
-                this.passwordInput = "";
-                this.clearErrorMessages();
-                this.page = "formLabLogSearch";
-                this.getLogs();
-            } else {
-                this.passwordInput = "";
-                this.errorMessages.auth = "The password entered was incorrect."
-            }
-            
-        },
-
         buttonAuthenticateCancel: function () {
             this.clearErrorMessages();
             this.buttonSwitchPageBack();
@@ -144,7 +128,7 @@ Vue.createApp({
         buttonSwitchPageToSearch: function () {
             this.cleanInputs();
             this.cleanSearchInputs();
-            this.page = "formSearchAuth";
+            this.page = "formLabLogSearch";
             this.getLogs();
         },
 
