@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app" v-if="page">
+        <!-- This is my Vue app -->
+        <!-- @ = v-on:, @click = v-on:click -->
+        <!-- : = v-bind:, :style = v-bind:style -->
+        <header>
+            <h1>Check In</h1>
+        </header>
+        <main>
+            <div v-if="!logIsValid" class="errorMessage">
+                <div>
+                    <p v-for="error in errorMessages"> {{ error }} </p>
+                </div>
+                <button @click="buttonErrorClose">Close</button>
+            </div>
+            <div v-if="page == 'formLabCheckin'" class="formLabCheckin">
+                <label>D Number</label>
+                <input v-model="inputLog.studentID" type="text" placeholder="d00######">
+
+                <button @click="buttonCheckIn">Check In</button>
+                <button @click="buttonCheckOut">Check Out</button>
+            </div>
+            <div v-if="page == 'formLabCheckin2'" class="formLabCheckin2">
+                <label>Class</label>
+                <label>Type of Help</label>
+                <input v-model="inputLog.class" type="text" list="classes">
+                    <datalist id="classes">
+                        <option>CS1030</option>
+                        <option>CS1400</option>
+                        <option>CS1410</option>
+                        <option>CS2420</option>
+                        <option>CS2450</option>
+                        <option>CS2810</option>
+                        <option>CS3005</option>
+                        <option>CS3310</option>
+                        <option>SE1400</option>
+                        <option>SE3200</option>
+                        <option>IT1100</option>
+                        <option>IT1200</option>
+                        <option>IT2300</option>
+                        <option>IT2400</option>
+                        <option>Other</option>
+                    </datalist>
+                <input v-model="inputLog.typeHelp" type="text" list="typeHelps">
+                    <datalist id="typeHelps">
+                        <option>Pass Off</option>
+                        <option>Assignment</option>
+                        <option>Study Group</option>
+                        <option>Other</option>
+                    </datalist>
+
+                <button @click="buttonConfirm">Confirm</button>
+                <button @click="buttonCancel">Cancel</button>
+            </div>
+
+            <ul id="log">
+                <li id="header">
+                    <p>d-Number</p>
+                    <p>Time In</p>
+                    <p>Time Out</p>
+                    <p>Class</p>
+                    <p>Type of Help</p>
+                </li>
+                <li v-for="log in logs">
+                    <p>{{ log.studentID }}</p>
+                    <p>{{ log.timeIn.toLocaleTimeString() }}</p>
+                    <p v-if="log.timeOut">{{ log.timeOut.toLocaleTimeString() }}</p>
+                    <p v-else>-</p>
+                    <p>{{ log.class }}</p>
+                    <p>{{ log.typeHelp }}</p>
+                </li>
+            </ul>
+        </main>
+        <footer>
+
+        </footer>
+    
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
