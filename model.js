@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-const User = mongoose.model('UserPROD', userSchema)
+const User = mongoose.model('PRODUser', userSchema)
 
 const logSchema = new mongoose.Schema({
     user : {type: mongoose.Schema.Types.ObjectId, ref: User},
@@ -45,7 +45,7 @@ const logSchema = new mongoose.Schema({
     }
 })
 
-const Log = mongoose.model('LogPROD', logSchema);
+const Log = mongoose.model('PRODLog', logSchema);
 
 module.exports = {
     Log : Log,
