@@ -164,7 +164,7 @@ input:focus, select:focus {
     margin-bottom: 20px;
 }
 
-#log {
+#log, #logModify {
     grid-column: 2 / -2;
     width: 100%;
     display: flex;
@@ -175,24 +175,53 @@ input:focus, select:focus {
     width: 700px;
 }
 
-#log > li {
+#log > li, #logModify > li, .alsoLog {
     display: grid;
     grid-template-columns: repeat(5, 20%);
 }
 
-#log > li > * {
+#log > li > *, #logModify > li > *, .alsoLog > * {
     padding: 5px;
     /* border: 2px solid #0c233f; */
     /* border-top: 2px solid #0c233f; */
     border-bottom: 2px solid #0c233f;
 }
 
-#log > li:nth-child(even) {
-     background-color: #f0f0f0;
+.alsoLog {
+    background-color: #fcfcfc;
+    border: 2px solid #0c233f;
 }
 
-#log > li:nth-child(odd) {
+.alsoLog > p {
+    border: none;
+}
+
+#log > li:nth-child(even), #logModify > li:nth-child(even) {
+    background-color: #fcfcfc;
+}
+
+#log > li:nth-child(odd), #logModify > li:nth-child(odd) {
     background-color: #afb7c2;
+}
+
+#logModify > li > p {
+    transition: padding .3s ease-in, color .3s ease-in;
+}
+
+#logModify > li.logHover:hover {
+    color: #0350af;
+}
+
+#logModify > li.logHover:hover > p {
+    padding: 10px;
+}
+
+#selectedLog {
+    color: #0350af;
+}
+
+#selectedLog > p {
+    padding: 10px;
 }
 
 .errorMessage {
@@ -240,17 +269,13 @@ input:focus, select:focus {
     margin-bottom: 20px;
 }
 
-/* .formLabLogSearch > button {
-    
-} */
-
 .formLabLogSearch > h2 {
     grid-column: 1 / -1;
     margin-bottom: 20px;
     text-align: center;
 }
 
-#data > h2 {
+#data > h2, #data > p {
     grid-column: 1 / -1;
     text-align: center;
 }
@@ -284,3 +309,72 @@ input:focus, select:focus {
     grid-column: 2 / -2;
     margin: 20px 20px 0 20px;
 }
+
+/* Log Modification */
+
+.modifyLog {
+    grid-column: 2 / -2;
+    box-sizing: content-box;
+    margin: 32px calc((100% - 480px)/2);
+    width: 400px;
+    display: grid;
+    grid-template-columns: 200px 200px;
+    grid-template-rows: auto;
+    background-color: #afb7c2;
+    padding: 30px;
+    border: 10px solid black;
+    border-radius: 10px;
+}
+
+.modifyLog > input:first-of-type, .modifyLog > label:first-of-type {
+    grid-column: 1 / -1;
+    width: 160px;
+    margin: 0 calc((100% - 160px)/2) 20px calc((100% - 160px)/2);
+}
+
+.modifyLog > label:first-of-type {
+    margin: 0 calc((100% - 160px)/2);
+}
+
+.modifyLog > * {
+    margin: 0 20px 0 20px;
+}
+
+.modifyLog > input, .modifyLog > button {
+    margin-bottom: 20px;
+}
+
+.modifyLog > h2 {
+    grid-column: 1 / -1;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Delete Modal */
+
+#deleteModal {
+    grid-column: 2 / -2;
+    box-sizing: content-box;
+    margin: 32px calc((100% - 780px)/2);
+    width: 700px;
+    display: grid;
+    grid-template-columns: 150px 200px 200px 150px;
+    grid-template-rows: auto;
+    background-color: #afb7c2;
+    padding: 30px;
+    border: 10px solid black;
+    border-radius: 10px;
+}
+
+#deleteModal > h2 {
+    margin-bottom: 5px;
+}
+
+#deleteModal > h2, #deleteModal > li {
+    grid-column: 1 / -1;
+}
+
+#deleteModal > button {
+    margin: 20px 20px 0 20px;
+}
+    

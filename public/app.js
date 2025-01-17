@@ -16,6 +16,17 @@ Vue.createApp({
                 typeHelp: ""
             },
 
+            inputModify: {
+                studentID: "",
+                timeIn: "",
+                timeOut: "",
+                class: "",
+                typeHelp: ""
+            },
+
+            modifyID: "",
+            modifyDelete: false,
+
             errorMessages: {},
 
             page: "formLabCheckin",
@@ -61,10 +72,12 @@ Vue.createApp({
 
         buttonAuthenticate: function () {
             if (this.passwordInput == this.password) {
+                this.passwordInput = "";
                 this.clearErrorMessages();
                 this.page = "formLabLogSearch";
                 this.getLogs();
             } else {
+                this.passwordInput = "";
                 this.errorMessages.auth = "The password entered was incorrect."
             }
             
@@ -93,6 +106,19 @@ Vue.createApp({
             this.getLogs();
         },
 
+        deleteLogModal: function () {
+            this.modifyDelete = true;
+        },
+
+        confirmDelete: function () {
+            this.modifyDelete = false;
+            this.deleteLog()
+        },
+
+        cancelDelete: function () {
+            this.modifyDelete = false;
+        },
+
         cleanInputs: function () {
             this.inputLog.studentID = "";
             this.inputLog.class = "";
@@ -103,6 +129,24 @@ Vue.createApp({
             this.searchParams.date = "";
             this.searchParams.class = "";
             this.searchParams.typeHelp = "";
+        },
+
+        cleanModify: function () {
+            this.modifyID = "";
+            this.inputModify.studentID = "";
+            this.inputModify.timeIn = "";
+            this.inputModify.timeOut = "";
+            this.inputModify.class = "";
+            this.inputModify.typeHelp = "";
+        },
+
+        setModify: function (log) {
+            this.modifyID = log._id;
+            this.inputModify.studentID = log.studentID;
+            this.inputModify.timeIn = log.timeIn;
+            this.inputModify.timeOut = log.timeOut;
+            this.inputModify.class = log.class;
+            this.inputModify.typeHelp = log.typeHelp;
         },
 
         validateDNumber: function () {
@@ -139,6 +183,34 @@ Vue.createApp({
                 return false;
             }
             return true;
+        },
+
+        validateModify: function () {
+            if (this.inputModify.studentID == "") {
+                this.errorMessages.studentID = "Please enter a student ID";
+            } else if ((this.inputModify.studentID.substring(0, 3) != "d00" && this.inputModify.studentID.substring(0, 3) != "D00") || this.inputModify.studentID.length != 9) {
+                this.errorMessages.studentID = "Please enter student ID in the correct format: d00######";
+            }
+            if (this.inputModify.class == "") {
+                this.errorMessages.class = "Please enter a class";
+            }
+            if (this.inputModify.typeHelp == "") {
+                this.errorMessages.typeHelp = "Please enter a type of help";
+            }
+            if (this.inputModify.timeIn == "") {
+                this.errorMessages.timeIn = "Please enter a student ID";
+            } else if (Date.parse(this.inputModify.timeIn) == NaN) {
+                this.errorMessages.timeIn = "Please enter a the time in in a proper format";
+            }
+            if (this.inputModify.timeOut != "" && Date.parse(this.inputModify.timeOut) == NaN) {
+                this.errorMessages.timeIn = "Please enter a the time out in a proper format";
+            }
+
+            if (!this.logIsValid) {
+                return false;
+            }
+            return true;
+                
         },
 
         clearErrorMessages: function () {
@@ -192,6 +264,16 @@ Vue.createApp({
             });
         },
 
+        // getLog: function (logID) {
+        //     fetch("/logs/" + logID).then((response) => {
+        //         if (response.status == 200) {
+        //             response.json().then((serverLog) => {
+        //                 return serverLog;
+        //             });
+        //         }
+        //     });
+        // },
+
         postLogs: function () {
             if (!this.validateCheckIn()) {
                 return;
@@ -227,6 +309,53 @@ Vue.createApp({
             });
         },
 
+        putLog: function () {
+            if (!this.validateModify()) {
+                return;
+            }
+
+            var data = "studentID=" + encodeURIComponent(this.inputModify.studentID);
+            data += "&class=" + encodeURIComponent(this.inputModify.class);
+            data += "&typeHelp=" + encodeURIComponent(this.inputModify.typeHelp);
+            data += "&timeIn=" + encodeURIComponent(this.inputModify.timeIn);
+            if (this.inputModify.timeOut) {
+                data += "&timeOut=" + encodeURIComponent(this.inputModify.timeOut);
+            }
+
+            console.log("sending data to server:", data)
+            fetch("/logs/" + this.modifyID, {
+                method: "PUT",
+                body: data,
+                headers: {
+                    "Content-type": "application/x-www-form-urlencoded"
+                }
+                }).then((response) => {
+                    this.clearErrorMessages();
+                    if (response.status == 200) {
+                        this.getLogs();
+                        this.cleanModify();
+                        this.page = "formLabLogSearch";
+                    } else if (response.status > 400) {
+                        this.errorMessages.server = "There was an issue with the request.";
+                    }  
+            });
+        },
+
+        deleteLog: function () {
+            fetch("/logs/" + this.modifyID, {
+                method: "DELETE"
+                }).then((response) => {
+                    this.clearErrorMessages();
+                    if (response.status == 200) {
+                        this.getLogs();
+                        this.cleanModify();
+                        this.page = "formLabLogSearch";
+                    } else if (response.status > 400) {
+                        this.errorMessages.server = "There was an issue with the request.";
+                    }  
+            });
+        },
+
         patchLog: function () {
             if (!this.validateDNumber()) {
                 return;
@@ -259,6 +388,10 @@ Vue.createApp({
                     return true;
                 }
             });
+        },
+
+        isSelected: function (log) {
+            return log._id == this.modifyID;
         }
         
     },
@@ -266,7 +399,11 @@ Vue.createApp({
     computed: {
         logIsValid: function () {
             return Object.keys(this.errorMessages).length <= 0;
-        }
+        },
+
+        // inputModify: function () {
+        //     return this.logs.find((log) => log.studentID == this.modifyID);
+        // }
     },
 
     created: function () {
