@@ -67,6 +67,7 @@ Vue.createApp({
         },
 
         buttonSearchClear: function () {
+            this.cleanSearchInputs();
             this.getLogs();
         },
 
