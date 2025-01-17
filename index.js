@@ -13,12 +13,29 @@ app.get("/logs", function (request, response) {
     filter = {}
     if (request.query.date) {
         if (request.query.date == "today") {
-            var today = new Date()
-            today.setHours(0, 0, 0, 0)
-            console.log("Today:", today)
-            console.log("rn: ", new Date())
-            filter.timeIn = { $gte : today.toISOString() }
+            var searchDate = new Date()
+            searchDate = new Date(searchDate.getFullYear(), searchDate.getMonth(), searchDate.getDate())
+            filter.timeIn = { $gte : searchDate.toISOString() }
+        }else if (request.query.date == "week") {
+            var searchDate = new Date()
+            var firstOfWeek = searchDate.getDate() - searchDate.getDay()
+            searchDate = new Date(searchDate.getFullYear(), searchDate.getMonth(), firstOfWeek)
+            filter.timeIn = { $gte : searchDate.toISOString() }
+        }else if (request.query.date == "month") {
+            var searchDate = new Date()
+            searchDate = new Date(searchDate.getFullYear(), searchDate.getMonth(), 1)
+            filter.timeIn = { $gte : searchDate.toISOString() }
+        }else if (request.query.date == "year") {
+            var searchDate = new Date()
+            searchDate = new Date(searchDate.getFullYear(), 0)
+            filter.timeIn = { $gte : searchDate.toISOString() }
         }
+    }
+    if (request.query.class) {
+        filter.class = request.query.class
+    }
+    if (request.query.typeHelp) {
+        filter.typeHelp = request.query.typeHelp
     }
 
     model.Log.find(filter).then((logs) => {

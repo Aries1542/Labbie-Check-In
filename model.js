@@ -21,7 +21,8 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-const User = mongoose.model('PRODUser', userSchema)
+//WARNING TODO: remember to return to PROD tables before push
+const User = mongoose.model('TESTUser', userSchema)
 
 const logSchema = new mongoose.Schema({
     user : {type: mongoose.Schema.Types.ObjectId, ref: User},
@@ -45,7 +46,8 @@ const logSchema = new mongoose.Schema({
     }
 })
 
-const Log = mongoose.model('PRODLog', logSchema);
+//WARNING TODO: remember to return to PROD tables before push
+const Log = mongoose.model('TESTLog', logSchema);
 
 module.exports = {
     Log : Log,
