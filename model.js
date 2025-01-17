@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
 }, {versionKey: false})
 
 //WARNING TODO: remember to return to PROD tables before push
-const User = mongoose.model('TESTUser', userSchema)
+const User = mongoose.model('PRODUser', userSchema)
 
 const logSchema = new mongoose.Schema({
     user : {type: mongoose.Schema.Types.ObjectId, ref: User},
@@ -47,7 +47,7 @@ const logSchema = new mongoose.Schema({
 }, {versionKey: false})
 
 //WARNING TODO: remember to return to PROD tables before push
-const Log = mongoose.model('TESTLog', logSchema);
+const Log = mongoose.model('PRODLog', logSchema);
 
 module.exports = {
     Log : Log,

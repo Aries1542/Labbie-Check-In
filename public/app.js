@@ -21,10 +21,11 @@ Vue.createApp({
             page: "formLabCheckin",
 
             classes: ["CS1030", "CS1400", "CS1410", "CS2420", "CS2450", "CS2810", "CS3005", "CS3310", "SE1400", "SE3200", "IT1100", "IT1200", "IT2300", "IT2400", "Other"],
-
             typeHelps: ["Pass Off", "Assignment", "Study Group", "Other"],
+            times: ["Today", "This Week", "This Month", "All Time"],
 
-            times: ["Today", "This Week", "This Month", "All Time"]
+            password: "password",
+            passwordInput: ""
         }
     },
 
@@ -58,6 +59,22 @@ Vue.createApp({
             this.getLogs();
         },
 
+        buttonAuthenticate: function () {
+            if (this.passwordInput == this.password) {
+                this.clearErrorMessages();
+                this.page = "formLabLogSearch";
+                this.getLogs();
+            } else {
+                this.errorMessages.auth = "The password entered was incorrect."
+            }
+            
+        },
+
+        buttonAuthenticateCancel: function () {
+            this.clearErrorMessages();
+            this.buttonSwitchPageBack();
+        },
+
         buttonErrorClose: function () {
             this.clearErrorMessages();
         },
@@ -65,7 +82,7 @@ Vue.createApp({
         buttonSwitchPageToSearch: function () {
             this.cleanInputs();
             this.cleanSearchInputs();
-            this.page = "formLabLogSearch";
+            this.page = "formSearchAuth";
             this.getLogs();
         },
 
