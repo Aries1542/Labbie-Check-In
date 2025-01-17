@@ -11,6 +11,8 @@
         <!-- : = v-bind:, :style = v-bind:style -->
         <header>
             <h1>Check In</h1>
+            <button v-if="page == 'formLabCheckin' || page == 'formLabCheckin2'" @click="buttonSwitchPageToSearch">Search Logs</button>
+            <button v-if="page == 'formLabLogSearch'" @click="buttonSwitchPageBack">Back to Check In</button>
         </header>
         <main>
             <div v-if="!logIsValid" class="errorMessage">
@@ -26,40 +28,44 @@
                 <button @click="buttonCheckIn">Check In</button>
                 <button @click="buttonCheckOut">Check Out</button>
             </div>
+            
             <div v-if="page == 'formLabCheckin2'" class="formLabCheckin2">
                 <label>Class</label>
                 <label>Type of Help</label>
                 <input v-model="inputLog.class" type="text" list="classes">
-                    <datalist id="classes">
-                        <option>CS1030</option>
-                        <option>CS1400</option>
-                        <option>CS1410</option>
-                        <option>CS2420</option>
-                        <option>CS2450</option>
-                        <option>CS2810</option>
-                        <option>CS3005</option>
-                        <option>CS3310</option>
-                        <option>SE1400</option>
-                        <option>SE3200</option>
-                        <option>IT1100</option>
-                        <option>IT1200</option>
-                        <option>IT2300</option>
-                        <option>IT2400</option>
-                        <option>Other</option>
-                    </datalist>
+                    
                 <input v-model="inputLog.typeHelp" type="text" list="typeHelps">
-                    <datalist id="typeHelps">
-                        <option>Pass Off</option>
-                        <option>Assignment</option>
-                        <option>Study Group</option>
-                        <option>Other</option>
-                    </datalist>
 
                 <button @click="buttonConfirm">Confirm</button>
                 <button @click="buttonCancel">Cancel</button>
             </div>
 
+            <div v-if="page == 'formLabLogSearch'" class="formLabLogSearch">
+                <h2>Search Logs</h2>
+
+                <label>Time</label>
+                <label>Class</label>
+                <input v-model="searchParams.date" type="text" list="times">
+                <input v-model="searchParams.class" type="text" list="classes">
+
+                <label>Type of Help</label>
+                <!-- <label>Major</label> --> <br>
+                <input v-model="searchParams.typeHelp" type="text" list="typeHelps">
+                    <!-- <input type="text" list="majors"> 
+                    <datalist id="majors">
+                        <option>Computer Science</option>
+                        <option>Software Engineering</option>
+                        <option>Information Technology</option>
+                    </datalist> --> <br> <!-- keeps grid working -->
+                
+                <button @click="buttonSearch">Search</button>
+                <button @click="buttonSearchClear">Clear Search</button>
+            </div>
+
             <ul id="log">
+                <li v-if="page == 'formLabLogSearch'" id="data">
+                     <h2>Found {{ logs.length }} {{ (logs.length == 1)? "log" : "logs" }}.<!-- out of {{  }} total. --></h2> 
+                </li>
                 <li id="header">
                     <p>d-Number</p>
                     <p>Time In</p>
@@ -80,8 +86,21 @@
         <footer>
 
         </footer>
+
+        <datalist id="classes">
+            <option v-for="each in classes">{{ each }}</option>
+        </datalist>
+    
+        <datalist id="typeHelps">
+            <option v-for="each in typeHelps">{{ each }}</option>
+        </datalist>
+    
+        <datalist id="times">
+            <option v-for="each in times">{{ each }}</option>
+        </datalist>
     
     </div>
+
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="app.js"></script>
 </body>

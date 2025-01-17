@@ -10,9 +10,21 @@ Vue.createApp({
                 typeHelp: ""
             },
 
+            searchParams: {
+                date: "",
+                class: "",
+                typeHelp: ""
+            },
+
             errorMessages: {},
 
-            page: "formLabCheckin"
+            page: "formLabCheckin",
+
+            classes: ["CS1030", "CS1400", "CS1410", "CS2420", "CS2450", "CS2810", "CS3005", "CS3310", "SE1400", "SE3200", "IT1100", "IT1200", "IT2300", "IT2400", "Other"],
+
+            typeHelps: ["Pass Off", "Assignment", "Study Group", "Other"],
+
+            times: ["Today", "This Week", "This Month", "All Time"]
         }
     },
 
@@ -29,9 +41,7 @@ Vue.createApp({
         },
 
         buttonCancel: function () {
-            this.inputLog.studentID = "";
-            this.inputLog.class = "";
-            this.inputLog.typeHelp = "";
+            this.cleanInputs();
             this.clearErrorMessages();
             this.page = "formLabCheckin";
         },
@@ -40,8 +50,42 @@ Vue.createApp({
             this.patchLog();
         },
 
+        buttonSearch: function () {
+            this.getLogs();
+        },
+
+        buttonSearchClear: function () {
+            this.getLogs();
+        },
+
         buttonErrorClose: function () {
             this.clearErrorMessages();
+        },
+
+        buttonSwitchPageToSearch: function () {
+            this.cleanInputs();
+            this.cleanSearchInputs();
+            this.page = "formLabLogSearch";
+            this.getLogs();
+        },
+
+        buttonSwitchPageBack: function () {
+            this.cleanInputs();
+            this.cleanSearchInputs();
+            this.page = "formLabCheckin";
+            this.getLogs();
+        },
+
+        cleanInputs: function () {
+            this.inputLog.studentID = "";
+            this.inputLog.class = "";
+            this.inputLog.typeHelp = "";
+        },
+
+        cleanSearchInputs: function () {
+            this.searchParams.date = "";
+            this.searchParams.class = "";
+            this.searchParams.typeHelp = "";
         },
 
         validateDNumber: function () {
@@ -84,23 +128,33 @@ Vue.createApp({
             this.errorMessages = {};
         }, 
 
-        // errorMessageForField: function (field) {
-
-        // },
-
-        // errorStyleForField: function (field) {
-        //     if (this.errorMessageForField(field)) {
-        //         return {color : red};
-        //     } else {
-        //         return;
-        //     }
-        // },
-
         getLogs: function () {
-            fetch("/logs?date=today").then((response) => {
+            filter = {}
+            if (this.page == 'formLabCheckin' || this.page == 'formLabCheckin2') {
+                filter.date = 'today';
+            }else if (this.page == 'formLabLogSearch') {
+                if (this.searchParams.date) {
+                    switch (this.searchParams.date) {
+                        case "Today": filter.date = 'today'; break;
+                        case "This Week": filter.date = 'week'; break;
+                        case "This Month": filter.date = 'month'; break;
+                    }
+                }
+                if (this.searchParams.class) {
+                    filter.class = this.searchParams.class;
+                }
+                if (this.searchParams.typeHelp) {
+                    filter.typeHelp = this.searchParams.typeHelp;
+                }
+            }
+
+            console.log(filter)
+            queryString = new URLSearchParams(filter);
+
+            fetch("/logs?" + queryString).then((response) => {
                 if (response.status == 200) {
                     response.json().then((serverLogs) => {
-                        console.log("received logs from API: ", serverLogs);
+                         ("received logs from API: ", serverLogs);
                         serverLogs.forEach((log) => {
                             // log.timeIn = log.timeIn.toLocaleTimeString();
                             if (log.timeIn) {
@@ -143,9 +197,7 @@ Vue.createApp({
                     this.clearErrorMessages();
                     if (response.status == 201) {
                         this.getLogs();
-                        this.inputLog.studentID = "";
-                        this.inputLog.class = "";
-                        this.inputLog.typeHelp = "";
+                        this.cleanInputs();
                         this.page = "formLabCheckin";
                     } else if (response.status == 400) {
                         this.errorMessages.server = "This student is already checked in.";
@@ -175,7 +227,7 @@ Vue.createApp({
                         
                         this.clearErrorMessages();
                         if (response.status == 200) {
-                            this.inputLog.studentID = "";
+                            this.cleanInputs();
                             this.getLogs();
                         }
                         else if (response.status == 400) {

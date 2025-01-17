@@ -114,21 +114,55 @@ app.patch("/logs/:logID", function (request, response) {
     })
 })
 
-// app.post("/users", function (request, response) {
+app.delete("/logs/:logID", function (request, response) {
+    model.Log.findByIdAndDelete(request.params.logID).then((log) => {
+        if (!log) {
+            response.sendStatus(404)
+        }else {
+            response.sendStatus(200)
+        }
+    }).catch((error) => {
+        console.log("Bad Input for DELETE /logs")
+        response.sendStatus(404)
+    })
+})
 
-// })
+app.put("/logs/:logID", function (request, response) {
+    const newLog = new model.Log({
+        _id : request.params.logID,
+        timeIn : request.body.timeIn,
+        class : request.body.class,
+        typeHelp : request.body.typeHelp
+    })
+    if (request.body.timeOut) {
+        newLog.timeOut = request.body.timeOut
+    }
+    if (request.body.userID) {
+        model.User.findOneByID(request.body.userID).then((user) => {
+            newLog.user = request.body.userID
+            newLog.studentID = user.userName
+        })
+    } else {
+        newLog.studentID = request.body.studentID
+    }
 
-// app.put("/users/:userID", function (request, response) {
+    if (!newLog.timeIn || !newLog.class || !newLog.typeHelp || !newLog.studentID) {
+        response.sendStatus(422)
+    } else {
+        model.Log.findOneAndReplace({ _id : request.params.logID }, newLog).then((log) => {
+            if (!log) {
+                response.sendStatus(404)
+            }else {
+                response.sendStatus(200)
+            }
+        }).catch((error) => {
+            console.log("Bad Input for PUT /logs")
+            response.sendStatus(404)
+        })
+    }
 
-// })
-
-// app.post("/sessions", function (request, response) {
-
-// })
-
-// app.delete("/sessions/:sessionID", function (request, response) {
     
-// })
+})
 
 
 app.listen(8080, function () {

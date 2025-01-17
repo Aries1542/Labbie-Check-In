@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
         type : Boolean,
         required : true
     }
-})
+}, {versionKey: false})
 
 //WARNING TODO: remember to return to PROD tables before push
 const User = mongoose.model('TESTUser', userSchema)
@@ -44,7 +44,7 @@ const logSchema = new mongoose.Schema({
         type : String,
         required : [true, "Type of Help is required"]
     }
-})
+}, {versionKey: false})
 
 //WARNING TODO: remember to return to PROD tables before push
 const Log = mongoose.model('TESTLog', logSchema);
