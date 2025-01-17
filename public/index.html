@@ -9,15 +9,22 @@
         <!-- This is my Vue app -->
         <!-- @ = v-on:, @click = v-on:click -->
         <!-- : = v-bind:, :style = v-bind:style -->
-        
-
-
 
         <header>
             <h1>Check In</h1>
-            <button v-if="page == 'formLabCheckin' || page == 'formLabCheckin2'" @click="buttonSwitchPageToSearch">Search Logs</button>
-            <button v-if="page == 'formLabLogSearch'" @click="buttonSwitchPageBack">Back to Check In</button>
+            <button v-if="user.permissions >= 3 && page != 'formSupersModify'" @click="">Manage Super Users (TODO)</button>
+            <button v-else-if="page == 'formSupersModify'" @click="buttonSwitchPageBack">Back to Check In</button>
+            <p v-else></p>
+            <button v-if="user.permissions >= 2 && page != 'formLabLogSearch'" @click="buttonSwitchPageToSearch">Search Logs</button>
+            <button v-else-if="page == 'formLabLogSearch'" @click="buttonSwitchPageBack">Back to Check In</button>
+            <p v-else></p>
+            <button v-if="user.permissions >= 1 && page != 'formUserModify'" @click="">Modify Account (TODO)</button>
+            <button v-else-if="page == 'formUserModify'" @click="buttonSwitchPageBack">Back to Check In</button>
+            <p v-else></p>
+            <button v-if="page != 'formLogin' && page != 'formSignup'" @click="buttonLogOut">Log Out</button>
+            <p v-else></p>
         </header>
+
         <main>
             <div v-if="!logIsValid" class="errorMessage">
                 <div>
@@ -25,6 +32,35 @@
                 </div>
                 <button @click="buttonErrorClose">Close</button>
             </div>
+
+            <div v-if="page == 'formLogin'" class="formLogin">
+                <h2>Log in</h2>
+                <label>D Number</label>
+                <label>Password</label>
+                <input v-model="registerInput.username" type="text">
+                <input v-model="registerInput.password" type="text">
+
+                <button @click="buttonLogIn">Log in</button>
+                <button @click="buttonSwitchToSignUp">Signup Instead</button>
+            </div>
+
+            <div v-if="page == 'formSignup'" class="formSignup">
+                <h2>Sign up</h2>
+
+                <label>D Number</label>
+                <label>Password</label>
+                <input v-model="registerInput.username" type="text">
+                <input v-model="registerInput.password" type="text">
+
+                <label>Major</label>
+                <br>
+                <input v-model="registerInput.major" type="text" list="majors">
+                <br>
+                
+                <button @click="buttonSignUp">Signup</button>
+                <button @click="buttonSwitchToLogIn">Log in instead</button>
+            </div>
+
             <div v-if="page == 'formLabCheckin'" class="formLabCheckin">
                 <label>D Number</label>
                 <input v-model="inputLog.studentID" type="text" placeholder="d00######">
@@ -32,16 +68,31 @@
                 <button @click="buttonCheckIn">Check In</button>
                 <button @click="buttonCheckOut">Check Out</button>
             </div>
-            
+
             <div v-if="page == 'formLabCheckin2'" class="formLabCheckin2">
                 <label>Class</label>
                 <label>Type of Help</label>
                 <input v-model="inputLog.class" type="text" list="classes">
-                    
                 <input v-model="inputLog.typeHelp" type="text" list="typeHelps">
 
                 <button @click="buttonConfirm">Confirm</button>
                 <button @click="buttonCancel">Cancel</button>
+            </div>
+
+            <div v-if="page == 'formLabCheckinStudent'" class="formLabCheckinStudent">
+                <label>Class</label>
+                <label>Type of Help</label>
+                <input v-model="inputLog.class" type="text" list="classes">
+                <input v-model="inputLog.typeHelp" type="text" list="typeHelps">
+
+                <button @click="buttonCheckInStudent">Check In</button>
+            </div>
+
+            <div v-if="page == 'formLabCheckoutStudent'" class="formLabCheckoutStudent">
+                <h2>Checked in since: </h2>
+                <h2> {{ Date.now() }}</h2>
+                
+                <button @click="buttonCheckOutStudent">Check Out</button>
             </div>
 
             <div v-if="page == 'formLabLogSearch'" class="formLabLogSearch">
@@ -158,7 +209,7 @@
         </footer>
 
         <datalist id="classes">
-            <option v-for="each in classes">{{ each }}</option>
+            <option v-for="each in allClasses">{{ each }}</option>
         </datalist>
     
         <datalist id="typeHelps">
@@ -167,6 +218,10 @@
     
         <datalist id="times">
             <option v-for="each in times">{{ each }}</option>
+        </datalist>
+
+        <datalist id="majors">
+            <option v-for="each in majors">{{ each }}</option>
         </datalist>
 
         
