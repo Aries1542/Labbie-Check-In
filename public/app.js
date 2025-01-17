@@ -364,7 +364,7 @@ Vue.createApp({
             timeOut = new Date();
 
             var data = "timeOut=" + encodeURIComponent(timeOut);
-            this.logs.every((log) => {
+            var notFound = this.logs.every((log) => {
                 if (log.studentID == this.inputLog.studentID)  {
                     fetch("/logs/" + log._id, {
                         method: "PATCH",
@@ -377,7 +377,7 @@ Vue.createApp({
                             this.getLogs();
                         }
                         else if (response.status == 400) {
-                            this.errorMessages.checkOut = "Student is not currently checked in."
+                            this.errorMessages.checkOut = "Student with ID ' " + this.inputLog.studentID + " ' is not currently checked in.";
                         } else if (response.status > 400) {
                             this.errorMessages.server = "There was an issue with the request.";
                         }
@@ -388,6 +388,13 @@ Vue.createApp({
                     return true;
                 }
             });
+
+            console.log(notFound);
+
+            if (notFound) {
+                this.errorMessages.checkOut = "Student with ID ' " + this.inputLog.studentID + " ' is not currently checked in.";
+            }
+
         },
 
         isSelected: function (log) {
