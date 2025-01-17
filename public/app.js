@@ -147,8 +147,12 @@ Vue.createApp({
                         this.inputLog.class = "";
                         this.inputLog.typeHelp = "";
                         this.page = "formLabCheckin";
-                    } else if (response.status >= 400) {
-                        this.errorMessages.server = "There was an issue with the request. This student may already be checked in.";
+                    } else if (response.status == 400) {
+                        this.errorMessages.server = "This student is already checked in.";
+                    } else if (response.status == 422) {
+                        this.errorMessages.server = "Not enough data to create a log. Please make sure all required fields are filled out.";
+                    } else if (response.status > 400) {
+                        this.errorMessages.server = "There was an issue with the request.";
                     }
                     
             });
@@ -176,6 +180,8 @@ Vue.createApp({
                         }
                         else if (response.status == 400) {
                             this.errorMessages.checkOut = "Student is not currently checked in."
+                        } else if (response.status > 400) {
+                            this.errorMessages.server = "There was an issue with the request.";
                         }
                         
                         return false;
