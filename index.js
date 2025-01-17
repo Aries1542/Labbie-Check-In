@@ -164,6 +164,35 @@ app.put("/logs/:logID", function (request, response) {
     
 })
 
+app.post("/users", function (request, response) {
+
+    const newUser = new model.User({
+        username : request.body.username,
+        major : request.body.major,
+        classes : request.body.classes,
+        admin : false
+    })
+
+    newUser.setEncryptedPassword(request.body.password).then(function () {
+        newUser.save().then(() => {
+            response.sendStatus(201)
+        }).catch((error) => {
+            var errorMessages = {};
+            if (error.errors) {
+                for (var fieldName in error.errors) {
+                    errorMessages[fieldName] = error.errors[fieldName].message
+                }
+                response.status(422).json(errorMessages)
+            }else {
+                response.status(500).json("Unknown error creating log.")
+            }
+            
+        })
+    })
+
+    
+})
+
 
 app.listen(8080, function () {
     console.log("Server is running...")
