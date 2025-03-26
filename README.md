@@ -1,5 +1,13 @@
 # Midterm Project: Lab Check In Web App
-**Deployed at: https://labbiecheckin.onrender.com/**
+**Deployed at: https://labbies.aries1542.dev/**
+
+## Instructions
+Demo login for standard user:
+    Username: d00444555
+    Password: password123
+Demo login for admin user:
+    Username: d00222333
+    Password: password123
 
 ## Resources
 
