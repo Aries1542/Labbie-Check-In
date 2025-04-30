@@ -1,6 +1,9 @@
 # Midterm Project: Lab Check In Web App
 **Deployed at: https://labbies.aries1542.dev/**
 
+## Description
+A check-in system for the Smith building's lab assistants (labbies) at Utah Tech to track how often students come in for services. Student's can create an account to sign in, or ask a labbie to sign them in with their D-Number. Signed in labbies can also search logs by date, as well as modify and delete faulty logs. 
+
 ## Instructions
 Demo login for standard user:
     Username: d00444555
