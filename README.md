@@ -7,22 +7,24 @@ A check-in system for the Smith building's lab assistants (labbies) at Utah Tech
 
 ### Screenshots
 
-!(Sign in screen)[screenshots/sign_in.png]
-
-!(Student home page)[screenshots/student_home.png]
-
-!(Labbie home page)[screenshots/labbie_home.png]
-
-!(Labbie log modification page)[screenshots/labbie_modify.png]
+Sign in screen
+![Sign in screen](screenshots/sign_in.png)
+Student home page
+![Student home page](screenshots/student_home.png)
+Labbie home page
+![Labbie home page](screenshots/labbie_home.png)
+Labbie log modification page
+![Labbie log modification page](screenshots/labbie_modify.png)
 
 ## Instructions
 
 Demo login for standard user:
-    Username: d00444555
-    Password: password123
+- Username: d00444555
+- Password: password123
+
 Demo login for admin user:
-    Username: d00222333
-    Password: password123
+- Username: d00222333
+- Password: password123
 
 ## Resources
 
