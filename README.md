@@ -7,13 +7,13 @@ A check-in system for the Smith building's lab assistants (labbies) at Utah Tech
 
 ### Screenshots
 
-!(Sign in screen)[]
+!(Sign in screen)[screenshots/sign_in.png]
 
-!(User home page)[]
+!(Student home page)[screenshots/student_home.png]
 
-!(Labbie home page)[]
+!(Labbie home page)[screenshots/labbie_home.png]
 
-!(Labbie log modification page)[]
+!(Labbie log modification page)[screenshots/labbie_modify.png]
 
 ## Instructions
 
